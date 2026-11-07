@@ -1,0 +1,14 @@
+//
+// Created by lucas on 2026/11/7.
+//
+
+#ifndef ATTENDANCEMANAGER_ATTENDANCEMANAGER_H
+#define ATTENDANCEMANAGER_ATTENDANCEMANAGER_H
+
+
+class AttendanceManager
+{
+};
+
+
+#endif //ATTENDANCEMANAGER_ATTENDANCEMANAGER_H
