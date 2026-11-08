@@ -4,9 +4,11 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include "CLIParser.h"
+#include "Employee.h"
+#include "EmployeeManager.h"
 #include "catch2/matchers/catch_matchers.hpp"
 #include "catch2/matchers/catch_matchers_exception.hpp"
-#include "../Src/common/TimeStampConvent.cpp"
+#include "common/TimeStampConvent.h"
 
 TEST_CASE("TimeStamp Conversion", "[timeStampConversion]")
 {
@@ -30,3 +32,26 @@ TEST_CASE("CommandLine Parsing","[CLI]")
     REQUIRE_THROWS_MATCHES(parser1.run(), std::runtime_error,Catch::Matchers::Message("gugugaga!!!!!"));
 }
 
+TEST_CASE("Test Employee Basic","[Employee]")
+{
+    Employee employee1{42,"tomori","mygo"};
+    REQUIRE(employee1.id==42);
+    REQUIRE(employee1.name=="tomori");
+    REQUIRE(employee1.department=="mygo");
+}
+
+TEST_CASE("Test EmployeeManager","[EmployeeManager]")
+{
+    vector<Employee> employees;
+    employees.emplace_back(42,"tomori","mygo");
+    employees.emplace_back(43,"anno","mygo");
+    employees.emplace_back(44,"riki","mygo");
+    EmployeeManager employeeManager{employees};
+    REQUIRE(*employeeManager.findEmployee(42)==Employee{42,"tomori","mygo"});
+    employeeManager.addEmployee(Employee{45,"soyo","mygo"});
+    employeeManager.addEmployee(Employee{46,"rana","mygo"});
+    REQUIRE(*employeeManager.findEmployee(45)==Employee{45,"soyo","mygo"});
+    employeeManager.deleteEmployee(42);
+    REQUIRE_THROWS_MATCHES(employeeManager.findEmployee(42),std::invalid_argument,Catch::Matchers::Message("Employee not found!!!!!"));
+    REQUIRE_THROWS_MATCHES(employeeManager.addEmployee(Employee{45,"soyo","mygo"}),std::invalid_argument,Catch::Matchers::Message("Employee soyo already exists!!!!"));
+}

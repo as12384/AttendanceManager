@@ -23,20 +23,32 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Catch2 nlohmann_json)
 
-add_library(CLIModule SHARED Src/CLIInterface.cpp Src/CLIParser.cpp Src/CommandActioner.cpp)
-target_include_directories(CLIModule PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Inc)
 
-add_library(EmployeeModule SHARED Src/Employee.cpp Src/EmployeeManager.cpp)
-target_include_directories(EmployeeModule PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Inc)
-
-add_library(AttendanceModule SHARED Src/AttendanceRecord.cpp Src/AttendanceManager.cpp)
-target_include_directories(AttendanceModule PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Inc)
-
-add_library(common SHARED Src/common/TimeStampConvent.cpp)
+add_library(common SHARED Lib/common/TimeStampConvent.cpp)
 target_include_directories(common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Inc)
 
+add_library(entity SHARED Lib/Employee.cpp Lib/AttendanceRecord.cpp)
+target_include_directories(entity PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Inc)
+
+add_library(JsonStorage SHARED Lib/JsonStorage.cpp)
+target_include_directories(JsonStorage PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Inc)
+target_link_libraries(JsonStorage nlohmann_json::nlohmann_json)
+
+add_library(manager SHARED Lib/EmployeeManager.cpp Lib/AttendanceManager.cpp)
+target_include_directories(manager PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Inc)
+target_link_libraries(manager entity)
+
+add_library(services SHARED Lib/EmployeeService.cpp)
+target_include_directories(services PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Inc )
+target_link_libraries(services JsonStorage manager)
+
+add_library(CLIModule SHARED Lib/CLIInterface.cpp Lib/CLIParser.cpp Lib/CommandActioner.cpp)
+target_include_directories(CLIModule PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Inc)
+target_link_libraries(CLIModule services common)
+
+
 add_executable(AttendanceManager Src/main.cpp)
-target_link_libraries(AttendanceManager PRIVATE AttendanceModule CLIModule EmployeeModule common nlohmann_json::nlohmann_json)
+target_link_libraries(AttendanceManager PRIVATE CLIModule)
 
 include(CTest)
 
@@ -49,3 +61,4 @@ if (BUILD_TESTING)
 
     catch_discover_tests(tests)
 endif ()
+

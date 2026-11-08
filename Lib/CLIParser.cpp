@@ -42,6 +42,10 @@ void CLIParser::run()
     for (const auto& [command,handler] : JumpMap)
     {
         if (command == ParsedCommand.commandName)
+        {
             handler(ParsedCommand.arguments);
+            return;
+        }
     }
+    throw(std::invalid_argument("Command not found!"));
 }

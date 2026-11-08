@@ -7,13 +7,15 @@
 #include <string>
 #include <vector>
 
+#include "EmployeeService.h"
 
 class CLIInterface
 {
 private:
     std::string commandLine;
+    EmployeeService &service;
 public:
-    CLIInterface();
+    CLIInterface(EmployeeService &manager);
     void start();
 };
 

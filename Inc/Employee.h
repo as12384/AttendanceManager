@@ -1,24 +1,20 @@
 #ifndef ATTENDANCEMANAGER_EMPLOYEE_H
 #define ATTENDANCEMANAGER_EMPLOYEE_H
 #include <string>
+#include <text_encoding>
+
+#include "AttendanceManager.h"
+
 using namespace std;
 class Employee
 {
-    private:
+public:
     string name;
     string department;
-    int number;
-
-    public:
-    Employee(int number,string name,string department);
-    string getName();
-    string getDepartment();
-    int getNumber();
-    void setName(string name);
-    void setDepartment(string department);
-    void setNumber(int number);
-    bool operator==(const Employee&) const;
-
+    int id;
+    Employee(int id,string name,string department);
+    bool operator==(const Employee& other) const;
+    bool operator<(const Employee& other) const;
 };
 
 

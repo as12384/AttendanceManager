@@ -1,18 +1,17 @@
 
 #ifndef ATTENDANCEMANAGER_ATTENDENCERECODE_H
 #define ATTENDANCEMANAGER_ATTENDENCERECODE_H
-#include "Employee.h"
-
+#include <string>
 
 class AttendanceRecord
 {
     private:
-    Employee* employee;
     int id;
-    int checkinTime;
-    int checkoutTime;
+    std::string date;
+    std::string checkinTime;
+    std::string checkoutTime;
     public:
-    AttendanceRecord(int id,string name,int checkinTime,int checkoutTime);;
+    AttendanceRecord(int id,std::string name,std::string checkinTime,std::string checkoutTime);;
 };
 
 
