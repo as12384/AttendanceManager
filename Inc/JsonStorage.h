@@ -4,20 +4,21 @@
 
 #ifndef ATTENDANCEMANAGER_JSONSTORAGE_H
 #define ATTENDANCEMANAGER_JSONSTORAGE_H
-#include <string>
 #include <nlohmann/json.hpp>
+#include <filesystem>
+#include <stdexcept>
 
 #include "AttendanceRecord.h"
 #include "Employee.h"
 
 class JsonStorage
 {
+private:
+    std::string filename;
 public:
-    JsonStorage() = default;
-    std::vector<AttendanceRecord> loadAttendanceRecords();
-    std::vector<Employee> loadEmployees();
-    void saveEmployees(std::vector<Employee> employees);
-    void saveAttendance(std::vector<AttendanceRecord> attendanceRecords);
+    JsonStorage(std::string filename);
+    std::pair<std::vector<Employee>,std::vector<AttendanceRecord>> load();
+    void save(const std::vector<Employee*>& employees,const std::vector<AttendanceRecord*>& attendanceRecords);
 };
 
 

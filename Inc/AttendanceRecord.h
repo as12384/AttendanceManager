@@ -3,16 +3,19 @@
 #define ATTENDANCEMANAGER_ATTENDENCERECODE_H
 #include <string>
 
+#include "Employee.h"
+
 class AttendanceRecord
 {
-    private:
-    int id;
-    std::string date;
-    std::string checkinTime;
-    std::string checkoutTime;
     public:
-    AttendanceRecord(int id,std::string name,std::string checkinTime,std::string checkoutTime);;
+    AttendanceRecord(int id,int employeeId,int date,int checkinTime,int checkoutTime);;
+    int id;
+    int date;
+    int checkinTime;
+    int checkoutTime;
+    int employeeId;
 };
+std::ostream& operator<<(std::ostream& os, const AttendanceRecord& record);
 
 
 #endif //ATTENDANCEMANAGER_ATTENDENCERECODE_H

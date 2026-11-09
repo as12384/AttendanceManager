@@ -1,7 +1,7 @@
 //
 // Created by lucas on 2026/11/6.
 //
-#include "common/TimeStampConvent.h"
+#include "common/common.h"
 
 #include <chrono>
 #include <sstream>
@@ -24,4 +24,15 @@ long TimetoStamp(
     }
 
     return duration_cast<seconds>(tp.time_since_epoch()).count();
+}
+
+int stringtoint(const std::string& s)
+{
+    int result=0;
+    for (auto i:s)
+        if (i<='9'&&i>='0')
+            result=result*10+i-'0';
+        else
+            throw std::invalid_argument(s+" is expected to be a number!!!");
+    return result;
 }

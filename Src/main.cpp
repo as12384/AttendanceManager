@@ -9,7 +9,7 @@
 int main() {
     try
     {
-        EmployeeService manager;
+        EmployeeService manager("database.json");
         CLIInterface cli(manager);
         cli.start();
     }

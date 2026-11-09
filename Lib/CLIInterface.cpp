@@ -11,24 +11,31 @@
 
 
 CLIInterface::CLIInterface(EmployeeService &manager) : service(manager)
-{
-    this->service=manager;
-}
+{}
 
 
 void CLIInterface::start()
 {
-    while (std::getline(std::cin, commandLine))
+    while (true)
     {
+        std::cout << ">> " ;
+
+        if (!std::getline(std::cin, commandLine))
+            break;
+
+        if (commandLine == "quit")
+            break;
+
         try
         {
             CLIParser parser{commandLine};
-            parser.run();
-            service.save();
+            Handler funcPtr=parser.solve();
+            if (funcPtr(parser.ParsedCommand.arguments,service))
+                service.save();
         }
-        catch (std::exception& e)
+        catch (const std::exception& e)
         {
-            std::cerr << e.what() << std::endl;
+            std::cout <<"ERROR: "<< e.what() << '\n';
         }
     }
 }

@@ -6,11 +6,8 @@
 
 #include <iostream>
 #include <ostream>
+#include <ranges>
 #include <utility>
-void EmployeeManager::saveEmployees()
-{
-    std::cout<<"Tried to save employees!!!"<<std::endl;
-}
 
 EmployeeManager::EmployeeManager(std::vector<Employee> employees)
 {
@@ -19,8 +16,7 @@ EmployeeManager::EmployeeManager(std::vector<Employee> employees)
 }
 
 EmployeeManager::~EmployeeManager()
-{
-}
+= default;
 
 void EmployeeManager::addEmployee(Employee employee)
 {
@@ -31,13 +27,43 @@ void EmployeeManager::addEmployee(Employee employee)
 
 void EmployeeManager::deleteEmployee(int employeeId)
 {
+    if (!employees.contains(employeeId))
+        throw(std::invalid_argument("Employee "+std::to_string(employeeId)+" not found!!!!"));
     employees.erase(employeeId);
 }
-
 Employee* EmployeeManager::findEmployee(int employeeId)
 {
     for (auto& [id,employee]: employees)
         if (id == employeeId)
             return &employee;
     throw(std::invalid_argument("Employee not found!!!!!"));
+}
+
+const std::vector<Employee*> EmployeeManager::findEmployee(std::string name) const
+{
+    vector<Employee*> result;
+    for (auto& employee: employees|std::views::values|std::views::filter([name](auto employees){return employees.name == name;}))
+    {
+        result.push_back(const_cast<vector<Employee*>::value_type>(&employee));
+    }
+    return result;
+}
+
+
+const std::vector<Employee*> EmployeeManager::listEmployees() const
+{
+    std::vector<Employee*> result;
+    result.reserve(employees.size());
+
+    for (const auto& employee : employees|std::views::values)
+        result.push_back(const_cast<vector<Employee*>::value_type>(&employee));
+
+    return result;
+}
+
+void EmployeeManager::editEmployee(int employee_id, const string& name, const std::string& department)
+{
+    auto employee_to_edit =findEmployee(employee_id);
+    employee_to_edit->name = name;
+    employee_to_edit->department = department;
 }

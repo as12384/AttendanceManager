@@ -24,7 +24,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Catch2 nlohmann_json)
 
 
-add_library(common SHARED Lib/common/TimeStampConvent.cpp)
+add_library(common SHARED Lib/common/common.cpp)
 target_include_directories(common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Inc)
 
 add_library(entity SHARED Lib/Employee.cpp Lib/AttendanceRecord.cpp)

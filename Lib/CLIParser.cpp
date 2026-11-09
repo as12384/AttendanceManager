@@ -9,6 +9,8 @@
 #include <utility>
 #include <iterator>
 
+#include "EmployeeService.h"
+
 CLIParser::CLIParser(std::string commandLine)
     : commandLine(std::move(commandLine))
 {
@@ -22,29 +24,43 @@ CLIParser::ParsedCommandStruct CLIParser::parse()
     std::istream_iterator<std::string> it(ss);
     const std::istream_iterator<std::string> end;
 
-    if (it == end)
+    if (it != end)
+        result.domain = *it++;
+    else
         throw(std::invalid_argument("NoInput!"));
 
-    result.commandName = *it++;
-    while (it != end)
-        result.arguments.push_back(*it++);
+
+    if (it != end)
+        result.action = *it++;
+    else
+        throw(std::invalid_argument("Have Domain but No Action!"));
+
+    result.arguments=vector<std::string>{it,end};
 
     return result;
 }
 
-void CLIParser::run()
+Handler CLIParser::solve()
 {
-    using Handler = void (*)(std::vector<std::string>);
-    std::pair<std::string,Handler> JumpMap[]
+    std::tuple<std::string,std::string,Handler> JumpMap[]
     {
-        {"gugu",&CMD::Test},
+        {"gugu","gaga",&CMD::Test},
+        {"employee","add",&CMD::AddEmployee},           //<employeeId> <name> <department>
+        {"employee","delete",&CMD::DeleteEmployee},     //<employeeId>
+        {"employee","edit",&CMD::EditEmployee},         //<employeeId> <newName> <newDepartment>
+        {"employee","find",&CMD::FindEmployee},         //id <employeeId> / name <name>
+        {"employee","list",&CMD::ListEmployees},        //
+        {"attendance","add",&CMD::AddRecord},           //<employeeId> <date> <checkin> <checkout>
+        {"attendance","delete",&CMD::DeleteRecord},     //<attendanceId>
+        {"attendance","edit",&CMD::EditRecord},         //<attendanceId> <newCheckin> <newCheckout>
+        {"attendance","find",&CMD::FindRecord},         //employee <employeeId> / date <date>/<startDate> <endDate>
+        {"attendance","list",&CMD::ListRecords},        //
     };
-    for (const auto& [command,handler] : JumpMap)
+    for (const auto& [domain,action,handler] : JumpMap)
     {
-        if (command == ParsedCommand.commandName)
+        if (domain == ParsedCommand.domain&&action==ParsedCommand.action)
         {
-            handler(ParsedCommand.arguments);
-            return;
+            return handler;
         }
     }
     throw(std::invalid_argument("Command not found!"));

@@ -11,8 +11,6 @@ class EmployeeManager
 {
 private:
     map<int,Employee> employees;
-    void loadEmployees(std::string filename);
-    void saveEmployees();
 
 public:
     EmployeeManager(std::vector<Employee> employees);
@@ -20,7 +18,9 @@ public:
     void addEmployee(Employee employee);
     void deleteEmployee(int employeeId);
     Employee* findEmployee(int employeeId);
-    const map<int,Employee>& listEmployees() const;
+    const std::vector<Employee*> findEmployee(std::string name) const;
+    const std::vector<Employee*> listEmployees() const;
+    void editEmployee(int employee_id, const string& name, const std::string& department);
 };
 
 

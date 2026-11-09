@@ -7,17 +7,21 @@
 #include <string>
 #include <vector>
 
+#include "EmployeeService.h"
+#include "CommandActioner.h"
+
 
 class CLIParser
 {
 public:
     struct ParsedCommandStruct
     {
-        std::string commandName;
+        std::string domain;
+        std::string action;
         std::vector<std::string> arguments;
     }ParsedCommand;
     CLIParser(std::string commandLine);
-    void run();
+    Handler solve();
 private:
     std::string commandLine;
     ParsedCommandStruct parse();

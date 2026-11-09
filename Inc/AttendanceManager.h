@@ -8,7 +8,6 @@
 #include <vector>
 
 #include "AttendanceRecord.h"
-#include "Employee.h"
 
 
 class AttendanceManager
@@ -17,8 +16,14 @@ class AttendanceManager
     std::map<int,AttendanceRecord> attendances;
     public:
     AttendanceManager(std::vector<AttendanceRecord> attendances);
+    void addRecord(AttendanceRecord attendance);
     void deleteRecord(int id);
-    const std::map<int,AttendanceRecord>& getAttendances() const;
+    void editRecord(int id, int newCheckinTime, int newCheckoutTime);
+    const std::vector<AttendanceRecord*> findRecordsByEmployeeId(int employeeId) const;
+    const std::vector<AttendanceRecord*> findRecordsByDate(int date);
+    const std::vector<AttendanceRecord*> findRecordsByDate(int dateStart, int dateEnd);
+    std::vector<AttendanceRecord*> listRecords() const;
+    bool hasRecord(int id);
 };
 
 
